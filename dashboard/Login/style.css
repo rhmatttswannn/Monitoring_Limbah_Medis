@@ -1,0 +1,7 @@
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+input::placeholder {
+  color: #9ca3af;
+}
