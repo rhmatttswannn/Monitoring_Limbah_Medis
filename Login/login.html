@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login - Madani Liquid Waste Control</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .glass-panel {
+            background: rgba(16, 34, 28, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(16, 183, 127, 0.1);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex items-center justify-center p-4">
+<!-- Main Container -->
+<div class="w-full max-w-md">
+<!-- Logo & Branding Section -->
+<div class="flex flex-col items-center mb-10">
+<div class="bg-primary/10 p-4 rounded-xl mb-4 border border-primary/20">
+<span class="material-symbols-outlined text-primary text-5xl" style="font-variation-settings: 'FILL' 1">
+                    water_drop
+                </span>
+</div>
+<h1 class="text-2xl font-bold tracking-tight text-center">
+<span class="text-primary">Madani</span> Liquid Waste
+                <span class="block text-sm font-medium text-slate-400 uppercase tracking-[0.2em] mt-1">Control System</span>
+</h1>
+</div>
+<!-- Login Form Card -->
+<div class="glass-panel p-8 rounded-xl shadow-2xl border border-primary/10">
+<h2 class="text-xl font-semibold mb-6 text-center">Sign In</h2>
+<form action="#" class="space-y-5">
+<!-- Email Input -->
+<div class="space-y-2">
+<label class="text-sm font-medium text-slate-400 ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">mail</span>
+</div>
+<input class="block w-full pl-10 pr-3 py-3.5 bg-background-dark/50 border border-slate-700 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 text-white" id="email" placeholder="name@hospital.com" type="email"/>
+</div>
+</div>
+<!-- Password Input -->
+<div class="space-y-2">
+<div class="flex justify-between items-center ml-1">
+<label class="text-sm font-medium text-slate-400" for="password">Password</label>
+<a class="text-xs text-primary hover:text-primary/80 transition-colors" href="#">Forgot Password?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-slate-500 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-xl">lock</span>
+</div>
+<input class="block w-full pl-10 pr-12 py-3.5 bg-background-dark/50 border border-slate-700 rounded-lg focus:ring-1 focus:ring-primary focus:border-primary transition-all placeholder:text-slate-600 text-white" id="password" placeholder="••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-3 flex items-center text-slate-500 hover:text-slate-300" type="button">
+<span class="material-symbols-outlined text-xl">visibility</span>
+</button>
+</div>
+</div>
+<!-- Login Button -->
+<button class="w-full bg-primary hover:bg-primary/90 text-background-dark font-bold py-3.5 rounded-lg shadow-lg shadow-primary/20 transition-all active:scale-[0.98] flex items-center justify-center gap-2 mt-4" type="submit">
+<span>Access Dashboard</span>
+<span class="material-symbols-outlined text-xl">login</span>
+</button>
+</form>
+</div>
+<!-- Footer -->
+<div class="mt-12 text-center space-y-4">
+<p class="text-sm text-slate-500">
+                Facing issues? <a class="text-primary hover:underline underline-offset-4" href="#">Contact IT Admin</a>
+</p>
+<div class="flex flex-col items-center gap-1">
+<div class="w-12 h-0.5 bg-primary/20 rounded-full mb-2"></div>
+<p class="text-[10px] text-slate-600 uppercase tracking-widest font-bold">
+                    v1.0.2 RS Madani IT Division
+                </p>
+<p class="text-[10px] text-slate-700">
+                    © 2024 Rumah Sakit Madani. All Rights Reserved.
+                </p>
+</div>
+</div>
+</div>
+<!-- Decorative Background Elements -->
+<div class="fixed top-0 left-0 w-full h-full -z-10 overflow-hidden pointer-events-none">
+<div class="absolute -top-[10%] -right-[5%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+<div class="absolute -bottom-[10%] -left-[5%] w-[40%] h-[40%] bg-primary/5 blur-[120px] rounded-full"></div>
+</div>
+</body></html>

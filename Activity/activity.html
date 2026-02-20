@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rumah Sakit Madani - Activity Logs</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#10b77f",
+                        "background-light": "#f6f8f7",
+                        "background-dark": "#10221c",
+                        "surface-dark": "#1a3029",
+                        "border-dark": "#244238",
+                    },
+                    fontFamily: {
+                        "display": ["Space Grotesk", "sans-serif"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .custom-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background-light dark:bg-background-dark text-slate-900 dark:text-slate-100 min-h-screen flex flex-col">
+<!-- Header Section -->
+<header class="sticky top-0 z-20 bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-md border-b border-slate-200 dark:border-border-dark px-4 py-4">
+<div class="flex items-center justify-between mb-4">
+<div class="flex items-center gap-3">
+<div class="bg-primary/20 p-2 rounded-lg">
+<span class="material-symbols-outlined text-primary">local_hospital</span>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight">Activity Logs</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">Rumah Sakit Madani • Monitoring</p>
+</div>
+</div>
+<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-border-dark">
+<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">more_vert</span>
+</button>
+</div>
+<!-- Search Bar -->
+<div class="relative">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm">search</span>
+<input class="w-full bg-slate-100 dark:bg-surface-dark border-none rounded-xl py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="Search logs, events, or sensors..." type="text"/>
+</div>
+<!-- Filter Chips -->
+<div class="flex gap-2 mt-4 overflow-x-auto custom-scrollbar pb-1">
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-primary text-white text-xs font-semibold">All Logs</button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span> Success
+            </button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-amber-500">warning</span> Warning
+            </button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px] text-red-500">error</span> Error
+            </button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="flex-1 px-4 py-6 overflow-y-auto pb-24">
+<!-- Today Group -->
+<section class="mb-8">
+<div class="flex items-center gap-3 mb-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Today</h2>
+<div class="h-px flex-1 bg-slate-200 dark:bg-border-dark"></div>
+</div>
+<div class="space-y-3">
+<!-- Log Entry: Success -->
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">biotech</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-slate-900 dark:text-slate-100">pH Level Normal</h3>
+<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">14:32</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Water treatment system report. Metric: <span class="text-primary font-medium">7.2 pH</span></p>
+<div class="mt-2 flex items-center gap-1">
+<span class="size-1.5 rounded-full bg-primary"></span>
+<span class="text-[10px] uppercase font-bold text-primary tracking-tighter">System Stable</span>
+</div>
+</div>
+</div>
+<!-- Log Entry: Warning -->
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
+<div class="size-10 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-amber-500">speed</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-slate-900 dark:text-slate-100">Flow Rate Exceeded</h3>
+<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">11:15</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Oxygen Supply Line B. Metric: <span class="text-amber-500 font-medium">15L/min</span></p>
+<div class="mt-2 flex items-center gap-1">
+<span class="size-1.5 rounded-full bg-amber-500"></span>
+<span class="text-[10px] uppercase font-bold text-amber-500 tracking-tighter">Review Required</span>
+</div>
+</div>
+</div>
+<!-- Log Entry: Error -->
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
+<div class="size-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-red-500">sensors_off</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-slate-900 dark:text-slate-100">Sensor Connection Lost</h3>
+<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">09:40</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Location: Ward A - Cardiac Monitoring Node 04</p>
+<div class="mt-2 flex items-center gap-1">
+<span class="size-1.5 rounded-full bg-red-500"></span>
+<span class="text-[10px] uppercase font-bold text-red-500 tracking-tighter">Critical Failure</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- Yesterday Group -->
+<section>
+<div class="flex items-center gap-3 mb-4">
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Yesterday</h2>
+<div class="h-px flex-1 bg-slate-200 dark:bg-border-dark"></div>
+</div>
+<div class="space-y-3">
+<!-- Log Entry: Warning -->
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm opacity-80">
+<div class="size-10 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-amber-500">bolt</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-slate-900 dark:text-slate-100">Backup Power Engaged</h3>
+<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">22:04</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Main grid fluctuation detected. Generator A active.</p>
+<div class="mt-2 flex items-center gap-1">
+<span class="size-1.5 rounded-full bg-amber-500"></span>
+<span class="text-[10px] uppercase font-bold text-amber-500 tracking-tighter">System Alert</span>
+</div>
+</div>
+</div>
+<!-- Log Entry: Success -->
+<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm opacity-80">
+<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-primary">ac_unit</span>
+</div>
+<div class="flex-1">
+<div class="flex justify-between items-start">
+<h3 class="font-semibold text-slate-900 dark:text-slate-100">HVAC Optimization</h3>
+<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">18:45</span>
+</div>
+<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Night mode activated for Admin Wing. Energy saving ON.</p>
+<div class="mt-2 flex items-center gap-1">
+<span class="size-1.5 rounded-full bg-primary"></span>
+<span class="text-[10px] uppercase font-bold text-primary tracking-tighter">Scheduled</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+<!-- Bottom Navigation Bar -->
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/95 backdrop-blur-lg border-t border-slate-200 dark:border-border-dark px-6 py-3 pb-6 flex items-center justify-between z-30">
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">dashboard</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Dashboard</span>
+</a>
+<a class="flex flex-col items-center gap-1" href="#">
+<span class="material-symbols-outlined text-primary fill-[1]">assignment</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">Logs</span>
+<div class="w-1 h-1 rounded-full bg-primary mt-0.5"></div>
+</a>
+<a class="flex flex-col items-center gap-1 group relative" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">notifications</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Alerts</span>
+<div class="absolute top-0 right-0.5 size-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></div>
+</a>
+<a class="flex flex-col items-center gap-1 group" href="#">
+<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">settings</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Settings</span>
+</a>
+</nav>
+</body></html>
