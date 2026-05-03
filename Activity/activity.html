@@ -1,12 +1,16 @@
 <!DOCTYPE html>
 
-<html class="dark" lang="en"><head>
+<html class="dark" lang="id"><head>
 <meta charset="utf-8"/>
+<script>
+    if (sessionStorage.getItem('isLoggedIn') !== 'true') {
+        window.location.href = '../Login/login.html';
+    }
+</script>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>Rumah Sakit Madani - Activity Logs</title>
+<title>Monitoring Limbah Medis Cair RSUD MADANI - Log Aktivitas</title>
 <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
 <script id="tailwind-config">
         tailwind.config = {
@@ -60,27 +64,25 @@
 <span class="material-symbols-outlined text-primary">local_hospital</span>
 </div>
 <div>
-<h1 class="text-xl font-bold tracking-tight">Activity Logs</h1>
-<p class="text-xs text-slate-500 dark:text-slate-400">Rumah Sakit Madani • Monitoring</p>
+<h1 class="text-xl font-bold tracking-tight">Log Aktivitas</h1>
+<p class="text-xs text-slate-500 dark:text-slate-400">RSUD Madani • Monitoring Limbah</p>
 </div>
 </div>
-<button class="size-10 flex items-center justify-center rounded-full bg-slate-100 dark:bg-surface-dark border border-slate-200 dark:border-border-dark">
-<span class="material-symbols-outlined text-slate-600 dark:text-slate-300">more_vert</span>
-</button>
+<div class="flex items-center gap-2">
+  <button onclick="exportToCSV()" class="h-10 px-4 flex items-center justify-center gap-2 rounded-xl bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest">
+    <span class="material-symbols-outlined text-lg">download</span> Ekspor
+  </button>
 </div>
-<!-- Search Bar -->
-<div class="relative">
-<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 dark:text-slate-500 text-sm">search</span>
-<input class="w-full bg-slate-100 dark:bg-surface-dark border-none rounded-xl py-3 pl-10 pr-4 text-sm focus:ring-2 focus:ring-primary/50 placeholder:text-slate-400 dark:placeholder:text-slate-500" placeholder="Search logs, events, or sensors..." type="text"/>
 </div>
+<!-- Search Bar Removed -->
 <!-- Filter Chips -->
 <div class="flex gap-2 mt-4 overflow-x-auto custom-scrollbar pb-1">
-<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-primary text-white text-xs font-semibold">All Logs</button>
+<button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-primary text-white text-xs font-semibold">Semua Log</button>
 <button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span> Success
+<span class="material-symbols-outlined text-[16px] text-primary">check_circle</span> Berhasil
             </button>
 <button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
-<span class="material-symbols-outlined text-[16px] text-amber-500">warning</span> Warning
+<span class="material-symbols-outlined text-[16px] text-amber-500">warning</span> Peringatan
             </button>
 <button class="whitespace-nowrap px-4 py-1.5 rounded-full bg-slate-100 dark:bg-surface-dark text-slate-600 dark:text-slate-300 text-xs font-medium border border-slate-200 dark:border-border-dark flex items-center gap-1">
 <span class="material-symbols-outlined text-[16px] text-red-500">error</span> Error
@@ -92,126 +94,111 @@
 <!-- Today Group -->
 <section class="mb-8">
 <div class="flex items-center gap-3 mb-4">
-<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Today</h2>
+<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Hari Ini</h2>
 <div class="h-px flex-1 bg-slate-200 dark:bg-border-dark"></div>
 </div>
-<div class="space-y-3">
-<!-- Log Entry: Success -->
-<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
-<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary">biotech</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<h3 class="font-semibold text-slate-900 dark:text-slate-100">pH Level Normal</h3>
-<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">14:32</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Water treatment system report. Metric: <span class="text-primary font-medium">7.2 pH</span></p>
-<div class="mt-2 flex items-center gap-1">
-<span class="size-1.5 rounded-full bg-primary"></span>
-<span class="text-[10px] uppercase font-bold text-primary tracking-tighter">System Stable</span>
-</div>
-</div>
-</div>
-<!-- Log Entry: Warning -->
-<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
-<div class="size-10 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-amber-500">speed</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<h3 class="font-semibold text-slate-900 dark:text-slate-100">Flow Rate Exceeded</h3>
-<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">11:15</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Oxygen Supply Line B. Metric: <span class="text-amber-500 font-medium">15L/min</span></p>
-<div class="mt-2 flex items-center gap-1">
-<span class="size-1.5 rounded-full bg-amber-500"></span>
-<span class="text-[10px] uppercase font-bold text-amber-500 tracking-tighter">Review Required</span>
-</div>
-</div>
-</div>
-<!-- Log Entry: Error -->
-<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm">
-<div class="size-10 rounded-full bg-red-500/10 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-red-500">sensors_off</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<h3 class="font-semibold text-slate-900 dark:text-slate-100">Sensor Connection Lost</h3>
-<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">09:40</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Location: Ward A - Cardiac Monitoring Node 04</p>
-<div class="mt-2 flex items-center gap-1">
-<span class="size-1.5 rounded-full bg-red-500"></span>
-<span class="text-[10px] uppercase font-bold text-red-500 tracking-tighter">Critical Failure</span>
-</div>
-</div>
-</div>
-</div>
-</section>
-<!-- Yesterday Group -->
-<section>
-<div class="flex items-center gap-3 mb-4">
-<h2 class="text-sm font-bold uppercase tracking-widest text-slate-500 dark:text-slate-400">Yesterday</h2>
-<div class="h-px flex-1 bg-slate-200 dark:bg-border-dark"></div>
-</div>
-<div class="space-y-3">
-<!-- Log Entry: Warning -->
-<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm opacity-80">
-<div class="size-10 rounded-full bg-amber-500/10 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-amber-500">bolt</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<h3 class="font-semibold text-slate-900 dark:text-slate-100">Backup Power Engaged</h3>
-<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">22:04</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Main grid fluctuation detected. Generator A active.</p>
-<div class="mt-2 flex items-center gap-1">
-<span class="size-1.5 rounded-full bg-amber-500"></span>
-<span class="text-[10px] uppercase font-bold text-amber-500 tracking-tighter">System Alert</span>
-</div>
-</div>
-</div>
-<!-- Log Entry: Success -->
-<div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm opacity-80">
-<div class="size-10 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-<span class="material-symbols-outlined text-primary">ac_unit</span>
-</div>
-<div class="flex-1">
-<div class="flex justify-between items-start">
-<h3 class="font-semibold text-slate-900 dark:text-slate-100">HVAC Optimization</h3>
-<span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">18:45</span>
-</div>
-<p class="text-sm text-slate-500 dark:text-slate-400 mt-1">Night mode activated for Admin Wing. Energy saving ON.</p>
-<div class="mt-2 flex items-center gap-1">
-<span class="size-1.5 rounded-full bg-primary"></span>
-<span class="text-[10px] uppercase font-bold text-primary tracking-tighter">Scheduled</span>
-</div>
-</div>
-</div>
-</div>
-</section>
+    <div class="space-y-3" id="log-container">
+      <!-- Logs will be injected here -->
+      <div class="text-center py-10 opacity-50">
+        <span class="material-symbols-outlined text-4xl mb-2">history</span>
+        <p class="text-xs font-bold uppercase tracking-widest">Belum ada aktivitas tercatat</p>
+      </div>
+    </div>
+  </section>
 </main>
+
+<script>
+  function renderLogs() {
+    const container = document.getElementById('log-container');
+    const history = JSON.parse(localStorage.getItem('waste_history') || '[]');
+
+    if (history.length === 0) return;
+
+    container.innerHTML = ''; // Clear empty state
+
+    history.forEach(log => {
+      const ph = parseFloat(log.ph);
+      const isWarning = ph < 6.5 || ph > 8.5 || log.jarak < 20;
+      
+      let icon = "check_circle";
+      let iconColor = "text-primary";
+      let bgColor = "bg-primary/10";
+      let status = "Sistem Stabil";
+      let title = "Kondisi Normal";
+
+      if (isWarning) {
+        icon = "warning";
+        iconColor = "text-amber-500";
+        bgColor = "bg-amber-500/10";
+        status = "Perlu Ditinjau";
+        title = log.jarak < 20 ? "Tangki Hampir Penuh" : "pH Tidak Normal";
+      }
+
+      const logHtml = `
+        <div class="bg-white dark:bg-surface-dark p-4 rounded-xl border border-slate-100 dark:border-border-dark flex gap-4 shadow-sm transition-all hover:border-primary/30">
+          <div class="size-10 rounded-full ${bgColor} flex items-center justify-center shrink-0">
+            <span class="material-symbols-outlined ${iconColor}">${icon}</span>
+          </div>
+          <div class="flex-1">
+            <div class="flex justify-between items-start">
+              <h3 class="font-semibold text-slate-900 dark:text-slate-100">${title}</h3>
+              <span class="text-[10px] font-medium text-slate-400 dark:text-slate-500">${log.time}</span>
+            </div>
+            <p class="text-sm text-slate-500 dark:text-slate-400 mt-1">
+              pH: <span class="${ph < 6.5 || ph > 8.5 ? 'text-amber-500' : 'text-primary'} font-bold">${ph.toFixed(1)}</span> • 
+              Suhu: <span class="font-bold">${parseFloat(log.suhu).toFixed(1)}°C</span> • 
+              Jarak: <span class="${log.jarak < 20 ? 'text-amber-500' : 'text-primary'} font-bold">${parseFloat(log.jarak).toFixed(1)}cm</span>
+            </p>
+            <div class="mt-2 flex items-center gap-1">
+              <span class="size-1.5 rounded-full ${isWarning ? 'bg-amber-500' : 'bg-primary'}"></span>
+              <span class="text-[10px] uppercase font-bold ${isWarning ? 'text-amber-500' : 'text-primary'} tracking-tighter">${status}</span>
+            </div>
+          </div>
+        </div>
+      `;
+      container.insertAdjacentHTML('beforeend', logHtml);
+    });
+  }
+
+  function exportToCSV() {
+    const history = JSON.parse(localStorage.getItem('waste_history') || '[]');
+    if (history.length === 0) {
+      alert("Tidak ada data untuk diekspor");
+      return;
+    }
+
+    let csvContent = "Waktu,pH,Suhu (C),Jarak (cm)\n";
+    history.forEach(log => {
+      csvContent += `${log.time},${log.ph},${log.suhu},${log.jarak}\n`;
+    });
+
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement("a");
+    const url = URL.createObjectURL(blob);
+    link.setAttribute("href", url);
+    link.setAttribute("download", `log_limbah_medis_${new Date().toLocaleDateString('id-ID')}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  }
+
+  // Initial render
+  renderLogs();
+
+  // Update every 5 seconds if open
+  setInterval(renderLogs, 5000);
+</script>
 <!-- Bottom Navigation Bar -->
-<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/95 backdrop-blur-lg border-t border-slate-200 dark:border-border-dark px-6 py-3 pb-6 flex items-center justify-between z-30">
-<a class="flex flex-col items-center gap-1 group" href="#">
+<nav class="fixed bottom-0 left-0 right-0 bg-white/90 dark:bg-background-dark/95 backdrop-blur-lg border-t border-slate-200 dark:border-border-dark px-12 py-3 pb-6 flex items-center justify-around z-30">
+<a class="flex flex-col items-center gap-1 group" href="../dashboard/index.html">
 <span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">dashboard</span>
-<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Dashboard</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Beranda</span>
 </a>
-<a class="flex flex-col items-center gap-1" href="#">
+<a class="flex flex-col items-center gap-1" href="activity.html">
 <span class="material-symbols-outlined text-primary fill-[1]">assignment</span>
-<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">Logs</span>
+<span class="text-[10px] font-bold uppercase tracking-tighter text-primary">Log</span>
 <div class="w-1 h-1 rounded-full bg-primary mt-0.5"></div>
-</a>
-<a class="flex flex-col items-center gap-1 group relative" href="#">
-<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">notifications</span>
-<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Alerts</span>
-<div class="absolute top-0 right-0.5 size-2 bg-red-500 rounded-full border-2 border-white dark:border-background-dark"></div>
-</a>
-<a class="flex flex-col items-center gap-1 group" href="#">
-<span class="material-symbols-outlined text-slate-400 dark:text-slate-500 group-hover:text-primary transition-colors">settings</span>
-<span class="text-[10px] font-bold uppercase tracking-tighter text-slate-400 dark:text-slate-500 group-hover:text-primary">Settings</span>
 </a>
 </nav>
 </body></html>

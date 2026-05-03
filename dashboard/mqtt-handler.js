@@ -1,0 +1,218 @@
+// ========== Configuration ==========
+const TANK_HEIGHT_MAX_CM = 60; 
+const MQTT_HOST = "broker.hivemq.com";
+const MQTT_PORT = 8000; // WebSocket port for HiveMQ
+const MQTT_TOPIC = "limbah/data";
+const CLIENT_ID = "web_client_" + Math.random().toString(16).substr(2, 8);
+
+// DOM Elements
+let phValEl, phStatusEl, tempValEl, tempProgEl, levelValEl, levelProgEl, tankPctEl, tankCmEl, statusDot, statusText;
+let chart; 
+let lastSeen = 0; // Timestamp pesan terakhir
+let watchdogTimer; // Timer untuk cek status aktif
+
+function initDOMElements() {
+  phValEl      = document.getElementById('ph-value');
+  phStatusEl   = document.getElementById('ph-status');
+  tempValEl    = document.getElementById('temp-value');
+  tempProgEl   = document.getElementById('temp-progress');
+  levelValEl   = document.getElementById('level-value');
+  levelProgEl  = document.getElementById('level-progress');
+  tankPctEl    = document.getElementById('tank-percent');
+  tankCmEl     = document.getElementById('tank-cm');
+  statusDot    = document.querySelector('.status-pulse');
+  statusText   = statusDot ? statusDot.nextElementSibling : null;
+  
+  initChart();
+}
+
+function initChart() {
+  const options = {
+    series: [{ name: 'Ketinggian (cm)', data: [] }],
+    chart: {
+      type: 'area',
+      height: 180,
+      toolbar: { show: false },
+      animations: { enabled: true, easing: 'linear', dynamicAnimation: { speed: 1000 } }
+    },
+    colors: ['#10b77f'],
+    fill: {
+      type: 'gradient',
+      gradient: { shadeIntensity: 1, opacityFrom: 0.4, opacityTo: 0.05, stops: [0, 90, 100] }
+    },
+    dataLabels: { enabled: false },
+    stroke: { curve: 'smooth', width: 3 },
+    xaxis: {
+      type: 'datetime',
+      labels: { show: false },
+      axisBorder: { show: false },
+      axisTicks: { show: false }
+    },
+    yaxis: { labels: { style: { colors: '#64748b' } }, min: 0, max: TANK_HEIGHT_MAX_CM },
+    grid: { borderColor: 'rgba(255,255,255,0.05)', strokeDashArray: 4 }
+  };
+
+  chart = new ApexCharts(document.querySelector("#chart-timeline"), options);
+  chart.render();
+
+  // Load existing history into chart
+  const history = JSON.parse(localStorage.getItem('waste_history') || '[]');
+  if (history.length > 0) {
+    const chartData = history.slice().reverse().map(item => ({
+      x: item.timestamp,
+      y: parseFloat(TANK_HEIGHT_MAX_CM - item.jarak)
+    }));
+    chart.updateSeries([{ data: chartData }]);
+  }
+}
+
+// ========== MQTT Client Setup ==========
+const client = new Paho.MQTT.Client(MQTT_HOST, MQTT_PORT, CLIENT_ID);
+
+client.onConnectionLost = onConnectionLost;
+client.onMessageArrived = onMessageArrived;
+
+function connectMQTT() {
+  console.log("Connecting to MQTT...");
+  client.connect({
+    onSuccess: onConnect,
+    onFailure: onConnectFailure,
+    useSSL: false,
+    keepAliveInterval: 30
+  });
+}
+
+function onConnect() {
+  console.log("Connected to MQTT Broker");
+  client.subscribe(MQTT_TOPIC);
+  
+  // Update UI Status
+  if (statusDot) {
+    statusText.textContent = "Broker Terhubung"; // Langkah pertama
+    statusText.classList.replace('text-red-500', 'text-primary');
+    
+    // Mulai cek detak jantung (watchdog) setiap 2 detik
+    startWatchdog();
+  }
+}
+
+function startWatchdog() {
+  if (watchdogTimer) clearInterval(watchdogTimer);
+  watchdogTimer = setInterval(() => {
+    const now = Date.now();
+    // Jika sudah lebih dari 10 detik tidak ada data
+    if (lastSeen > 0 && now - lastSeen > 10000) {
+      if (statusDot) {
+        statusDot.classList.replace('bg-primary', 'bg-amber-500');
+        statusText.textContent = "ESP32 Offline";
+        statusText.classList.replace('text-primary', 'text-amber-500');
+      }
+    }
+  }, 2000);
+}
+
+function onConnectFailure(err) {
+  console.log("Connect failed:", err);
+  setTimeout(connectMQTT, 5000);
+  
+  if (statusDot) {
+    statusDot.classList.replace('bg-primary', 'bg-red-500');
+    statusText.textContent = "Koneksi Terputus";
+    statusText.classList.replace('text-primary', 'text-red-500');
+  }
+}
+
+function onConnectionLost(responseObject) {
+  if (responseObject.errorCode !== 0) {
+    console.log("Connection lost:", responseObject.errorMessage);
+    connectMQTT();
+  }
+}
+
+function onMessageArrived(message) {
+  try {
+    const data = JSON.parse(message.payloadString);
+    console.log("Received data:", data);
+    
+    // Update timestamp pesan terakhir
+    lastSeen = Date.now();
+    
+    // Kembalikan status ke Aktif jika sebelumnya offline
+    if (statusDot && statusText.textContent !== "Sistem Aktif") {
+      statusDot.classList.replace('bg-amber-500', 'bg-primary');
+      statusDot.classList.replace('bg-red-500', 'bg-primary');
+      statusText.textContent = "Sistem Aktif";
+      statusText.classList.replace('text-amber-500', 'text-primary');
+      statusText.classList.replace('text-red-500', 'text-primary');
+    }
+
+    updateUI(data);
+  } catch (e) {
+    console.error("Error parsing payload:", e);
+  }
+}
+
+function getPHStatus(ph) {
+  if (ph < 6.5) return { label: 'ASAM', color: 'text-red-400' };
+  if (ph > 8.5) return { label: 'BASA', color: 'text-red-400' };
+  return { label: 'NORMAL', color: 'text-primary' };
+}
+
+function updateUI(data) {
+  if (!phValEl) return; // Ensure elements are ready
+
+  // pH
+  const ph = parseFloat(data.ph);
+  const phStatus = getPHStatus(ph);
+  phValEl.textContent = ph.toFixed(1);
+  phStatusEl.textContent = phStatus.label;
+  phStatusEl.className = `text-[9px] font-bold uppercase tracking-widest mt-0.5 ${phStatus.color}`;
+
+  // Temperature
+  const temp = parseFloat(data.suhu);
+  tempValEl.textContent = temp.toFixed(1);
+  const tempPct = Math.min(100, Math.max(0, ((temp - 20) / 30) * 100));
+  tempProgEl.style.width = tempPct + '%';
+
+  // Level / Distance
+  const distance = parseFloat(data.jarak);
+  const waterLevel = Math.max(0, TANK_HEIGHT_MAX_CM - distance);
+  
+  levelValEl.textContent = waterLevel.toFixed(1);
+  const levelPct = Math.min(100, Math.max(0, (waterLevel / TANK_HEIGHT_MAX_CM) * 100));
+  levelProgEl.style.width = levelPct + '%';
+
+  // Big Tank Card
+  tankPctEl.textContent = Math.round(levelPct);
+  tankCmEl.textContent = waterLevel.toFixed(1);
+
+  // Update Chart
+  if (chart) {
+    const newDataPoint = { x: Date.now(), y: parseFloat(waterLevel.toFixed(1)) };
+    const currentData = chart.w.config.series[0].data;
+    currentData.push(newDataPoint);
+    if (currentData.length > 20) currentData.shift();
+    chart.updateSeries([{ data: currentData }]);
+  }
+
+  saveToHistory(data);
+}
+
+function saveToHistory(data) {
+  let history = JSON.parse(localStorage.getItem('waste_history') || '[]');
+  const newEntry = {
+    time: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }),
+    ...data,
+    timestamp: Date.now()
+  };
+  
+  history.unshift(newEntry);
+  if (history.length > 20) history.pop();
+  localStorage.setItem('waste_history', JSON.stringify(history));
+}
+
+// Initial connection when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+  initDOMElements();
+  connectMQTT();
+});
