@@ -9,8 +9,8 @@ const char* ssid = "iPhone";
 const char* password = "11337700";
 
 // ================= TELEGRAM =================
-String botToken = "ISI_TOKEN_KAMU";
-String chatID  = "ISI_CHAT_ID";
+String botToken = "8526182253:AAFn0E7Pp_vlK3EBkWQHI0YT3kdy55S_sfE";
+String chatID  = "920102941";
 
 // ================= MQTT =================
 const char* mqtt_server = "broker.hivemq.com";
@@ -176,7 +176,7 @@ void loop() {
   Serial.println(payload);
 
   // ===== TELEGRAM ALERT =====
-  if (distance < 20) {
+  if (distance > 30) {
     if (!sudahKirim) {
 
       String pesan = "⚠️ PENAMPUNGAN PENUH\n";
