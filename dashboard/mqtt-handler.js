@@ -1,7 +1,7 @@
 // ========== Configuration ==========
 const TANK_HEIGHT_MAX_CM = 60; 
 const MQTT_HOST = "broker.hivemq.com";
-const MQTT_PORT = 8000; // WebSocket port for HiveMQ
+const MQTT_PORT = 8884; // WebSocket SSL port for HiveMQ
 const MQTT_TOPIC = "limbah/data";
 const CLIENT_ID = "web_client_" + Math.random().toString(16).substr(2, 8);
 
@@ -77,7 +77,7 @@ function connectMQTT() {
   client.connect({
     onSuccess: onConnect,
     onFailure: onConnectFailure,
-    useSSL: false,
+    useSSL: true, // Diaktifkan agar bisa jalan di Vercel (HTTPS)
     keepAliveInterval: 30
   });
 }
