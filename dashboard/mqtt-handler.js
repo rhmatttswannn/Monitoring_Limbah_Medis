@@ -88,8 +88,11 @@ function onConnect() {
   
   // Update UI Status
   if (statusDot) {
-    statusText.textContent = "Broker Terhubung"; // Langkah pertama
-    statusText.classList.replace('text-red-500', 'text-primary');
+    statusDot.classList.replace('bg-slate-500', 'bg-amber-500');
+    statusDot.classList.replace('bg-red-500', 'bg-amber-500');
+    statusText.textContent = "Menunggu Data..."; 
+    statusText.classList.replace('text-slate-500', 'text-amber-500');
+    statusText.classList.replace('text-red-500', 'text-amber-500');
     
     // Mulai cek detak jantung (watchdog) setiap 2 detik
     startWatchdog();
@@ -98,17 +101,32 @@ function onConnect() {
 
 function startWatchdog() {
   if (watchdogTimer) clearInterval(watchdogTimer);
+  const startTime = Date.now();
+  
   watchdogTimer = setInterval(() => {
     const now = Date.now();
-    // Jika sudah lebih dari 10 detik tidak ada data
-    if (lastSeen > 0 && now - lastSeen > 10000) {
-      if (statusDot) {
-        statusDot.classList.replace('bg-primary', 'bg-amber-500');
-        statusText.textContent = "ESP32 Offline";
-        statusText.classList.replace('text-primary', 'text-amber-500');
+    
+    // Jika BELUM PERNAH ada data sejak awal (cek timeout dari waktu koneksi)
+    if (lastSeen === 0) {
+      if (now - startTime > 15000) { // Beri waktu 15 detik untuk data pertama
+        updateStatusOffline();
       }
+      return;
+    }
+
+    // Jika SUDAH PERNAH ada data tapi berhenti (lebih dari 10 detik)
+    if (now - lastSeen > 10000) {
+      updateStatusOffline();
     }
   }, 2000);
+}
+
+function updateStatusOffline() {
+  if (statusDot && statusText.textContent !== "ESP32 Offline") {
+    statusDot.className = "status-pulse w-2 h-2 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)]";
+    statusText.textContent = "ESP32 Offline";
+    statusText.className = "text-[10px] font-black tracking-[0.3em] uppercase text-red-500";
+  }
 }
 
 function onConnectFailure(err) {
@@ -137,13 +155,11 @@ function onMessageArrived(message) {
     // Update timestamp pesan terakhir
     lastSeen = Date.now();
     
-    // Kembalikan status ke Aktif jika sebelumnya offline
+    // Kembalikan status ke Aktif jika sebelumnya offline atau baru konek
     if (statusDot && statusText.textContent !== "Sistem Aktif") {
-      statusDot.classList.replace('bg-amber-500', 'bg-primary');
-      statusDot.classList.replace('bg-red-500', 'bg-primary');
+      statusDot.className = "status-pulse w-2 h-2 rounded-full bg-primary shadow-[0_0_8px_rgba(16,183,127,0.6)]";
       statusText.textContent = "Sistem Aktif";
-      statusText.classList.replace('text-amber-500', 'text-primary');
-      statusText.classList.replace('text-red-500', 'text-primary');
+      statusText.className = "text-[10px] font-black tracking-[0.3em] uppercase text-primary";
     }
 
     updateUI(data);
