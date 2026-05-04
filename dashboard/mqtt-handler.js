@@ -227,6 +227,27 @@ function saveToHistory(data) {
   localStorage.setItem('waste_history', JSON.stringify(history));
 }
 
+function logout() {
+  const modal = document.getElementById('logout-modal');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+  }
+}
+
+function closeLogoutModal() {
+  const modal = document.getElementById('logout-modal');
+  if (modal) {
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+  }
+}
+
+function confirmLogout() {
+  sessionStorage.removeItem('isLoggedIn');
+  window.location.href = '../Login/login.html';
+}
+
 // Initial connection when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
   initDOMElements();

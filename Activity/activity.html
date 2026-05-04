@@ -72,6 +72,9 @@
   <button onclick="exportToCSV()" class="h-10 px-4 flex items-center justify-center gap-2 rounded-xl bg-primary/10 text-primary border border-primary/20 hover:bg-primary/20 transition-all font-bold text-xs uppercase tracking-widest">
     <span class="material-symbols-outlined text-lg">download</span> Ekspor
   </button>
+  <button onclick="logout()" class="size-10 flex items-center justify-center rounded-full bg-red-500/10 border border-red-500/20 hover:bg-red-500/20 transition-colors text-red-500" title="Keluar">
+    <span class="material-symbols-outlined text-xl">logout</span>
+  </button>
 </div>
 </div>
 <!-- Search Bar Removed -->
@@ -183,6 +186,27 @@
     document.body.removeChild(link);
   }
 
+  function logout() {
+    const modal = document.getElementById('logout-modal');
+    if (modal) {
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+  }
+
+  function closeLogoutModal() {
+    const modal = document.getElementById('logout-modal');
+    if (modal) {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  }
+
+  function confirmLogout() {
+    sessionStorage.removeItem('isLoggedIn');
+    window.location.href = '../Login/login.html';
+  }
+
   // Initial render
   renderLogs();
 
@@ -201,4 +225,27 @@
 <div class="w-1 h-1 rounded-full bg-primary mt-0.5"></div>
 </a>
 </nav>
+
+<!-- Custom Logout Modal -->
+<div id="logout-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4">
+  <div class="absolute inset-0 bg-background-dark/60 backdrop-blur-sm"></div>
+  <div class="relative bg-white dark:bg-surface-dark border border-slate-200 dark:border-border-dark w-full max-w-[280px] p-6 rounded-3xl shadow-2xl animate-in zoom-in duration-300">
+    <div class="flex flex-col items-center text-center">
+      <div class="w-16 h-16 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500 mb-4">
+        <span class="material-symbols-outlined text-4xl">logout</span>
+      </div>
+      <h3 class="text-lg font-bold mb-1">Konfirmasi Keluar</h3>
+      <p class="text-xs text-slate-500 dark:text-slate-400 mb-6 leading-relaxed">Apakah Anda yakin ingin mengakhiri sesi pemantauan ini?</p>
+      
+      <div class="grid grid-cols-2 gap-3 w-full">
+        <button onclick="closeLogoutModal()" class="py-3 rounded-xl bg-slate-100 dark:bg-white/5 border border-slate-200 dark:border-white/5 text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-300 hover:opacity-80 transition-all">
+          Batal
+        </button>
+        <button onclick="confirmLogout()" class="py-3 rounded-xl bg-red-500 text-white text-xs font-bold uppercase tracking-widest hover:bg-red-600 transition-all shadow-lg shadow-red-500/20 border-none">
+          Keluar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 </body></html>
