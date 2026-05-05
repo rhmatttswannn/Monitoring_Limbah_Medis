@@ -5,12 +5,20 @@
 #include <DallasTemperature.h>
 
 // ================= WIFI =================
-const char* ssid = "iPhone";
-const char* password = "11337700";
+// const char* ssid = "iPhone";
+// const char* password = "11337700";
 
 // ================= TELEGRAM =================
-String botToken = "8526182253:AAFn0E7Pp_vlK3EBkWQHI0YT3kdy55S_sfE";
-String chatID  = "920102941";
+// String botToken = "8526182253:AAFn0E7Pp_vlK3EBkWQHI0YT3kdy55S_sfE";
+// String chatID  = "920102941";
+
+// ================= WIFI =================
+const char* ssid = "OPPOA17k";
+const char* password = "18102002";
+
+// ================= TELEGRAM =================
+String botToken = "8642146908:AAHvAfiX7KYIz59kxU6yl8oqR7RsIjA0GqM";
+String chatID  = "7050161613";
 
 // ================= MQTT =================
 const char* mqtt_server = "broker.hivemq.com";
