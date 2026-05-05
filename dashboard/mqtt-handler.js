@@ -1,5 +1,6 @@
 // ========== Configuration ==========
-const TANK_HEIGHT_MAX_CM = 60; 
+const LEVEL_EMPTY_CM = 39;   // Jarak sensor saat tangki kosong
+const LEVEL_FULL_CM = 22;    // Jarak sensor saat tangki penuh
 const MQTT_HOST = "broker.hivemq.com";
 const MQTT_PORT = 8884; // WebSocket SSL port for HiveMQ
 const MQTT_TOPIC = "limbah/data";
@@ -48,7 +49,7 @@ function initChart() {
       axisBorder: { show: false },
       axisTicks: { show: false }
     },
-    yaxis: { labels: { style: { colors: '#64748b' } }, min: 0, max: TANK_HEIGHT_MAX_CM },
+    yaxis: { labels: { style: { colors: '#64748b' } }, min: 0, max: 100 }, // Sekarang dalam persen
     grid: { borderColor: 'rgba(255,255,255,0.05)', strokeDashArray: 4 }
   };
 
@@ -58,10 +59,12 @@ function initChart() {
   // Load existing history into chart
   const history = JSON.parse(localStorage.getItem('waste_history') || '[]');
   if (history.length > 0) {
-    const chartData = history.slice().reverse().map(item => ({
-      x: item.timestamp,
-      y: parseFloat(TANK_HEIGHT_MAX_CM - item.jarak)
-    }));
+    const chartData = history.slice().reverse().map(item => {
+      const dist = parseFloat(item.jarak);
+      // Inverted logic: (Empty - Current) / (Empty - Full)
+      const pct = Math.min(100, Math.max(0, ((LEVEL_EMPTY_CM - dist) / (LEVEL_EMPTY_CM - LEVEL_FULL_CM)) * 100));
+      return { x: item.timestamp, y: parseFloat(pct.toFixed(1)) };
+    });
     chart.updateSeries([{ data: chartData }]);
   }
 }
@@ -190,21 +193,26 @@ function updateUI(data) {
   const tempPct = Math.min(100, Math.max(0, ((temp - 20) / 30) * 100));
   tempProgEl.style.width = tempPct + '%';
 
-  // Level / Distance
+  // Level / Distance Calculation
   const distance = parseFloat(data.jarak);
-  const waterLevel = Math.max(0, TANK_HEIGHT_MAX_CM - distance);
   
-  levelValEl.textContent = waterLevel.toFixed(1);
-  const levelPct = Math.min(100, Math.max(0, (waterLevel / TANK_HEIGHT_MAX_CM) * 100));
+  // Inverted mapping: Semakin kecil jarak, semakin penuh
+  // Rumus: (BatasKosong - JarakSekarang) / (BatasKosong - BatasPenuh) * 100
+  const levelPct = Math.min(100, Math.max(0, ((LEVEL_EMPTY_CM - distance) / (LEVEL_EMPTY_CM - LEVEL_FULL_CM)) * 100));
+  
+  // Water level display (cm ketinggian air dari dasar/titik kosong)
+  const displayLevelCm = Math.max(0, LEVEL_EMPTY_CM - distance);
+  
+  levelValEl.textContent = displayLevelCm.toFixed(1);
   levelProgEl.style.width = levelPct + '%';
 
   // Big Tank Card
   tankPctEl.textContent = Math.round(levelPct);
-  tankCmEl.textContent = waterLevel.toFixed(1);
+  tankCmEl.textContent = displayLevelCm.toFixed(1);
 
-  // Update Chart
+  // Update Chart (dalam persen)
   if (chart) {
-    const newDataPoint = { x: Date.now(), y: parseFloat(waterLevel.toFixed(1)) };
+    const newDataPoint = { x: Date.now(), y: parseFloat(levelPct.toFixed(1)) };
     const currentData = chart.w.config.series[0].data;
     currentData.push(newDataPoint);
     if (currentData.length > 20) currentData.shift();

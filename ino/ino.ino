@@ -176,11 +176,10 @@ void loop() {
   Serial.println(payload);
 
   // ===== TELEGRAM ALERT =====
-  if (distance > 30) {
+  if (distance > 35) {
     if (!sudahKirim) {
 
-      String pesan = "⚠️ PENAMPUNGAN PENUH\n";
-      pesan += "Jarak: " + String(distance) + " cm\n";
+      String pesan = "⚠️ PENAMPUNGAN INLET PENUH\n" "KEMUNGKINAN TERSUMBAT\n";
       pesan += "Suhu: " + String(suhuC) + " C\n";
       pesan += "pH: " + String(ph);
 
